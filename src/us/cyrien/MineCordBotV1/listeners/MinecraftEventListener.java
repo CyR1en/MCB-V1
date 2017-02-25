@@ -38,7 +38,7 @@ public class MinecraftEventListener implements Listener {
     public void onPlayerChat(AsyncPlayerChatEvent e) {
         String msg = mentionHandler.handleMention(e.getMessage());
         String prefix = mcb.getMcbConfig().getDiscordPrefix();
-        String author = e.getPlayer().getDisplayName();
+        String author = e.getPlayer().getName();
         prefix = prefix.replaceAll("\\{sender}", author);
         messenger.sendMessageToAllBoundChannel("**" + prefix + ":** " + msg);
         mcb.getLogger().info(author + " -> discord: " + msg);
@@ -47,19 +47,19 @@ public class MinecraftEventListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         String msg = language.getTranslatedMessage("mc.message.login");
-        messenger.sendMessageEmbedToAllBoundChannel(new EmbedBuilder().setColor(new Color(92, 184, 92)).setTitle(langMessageParser.parsePlayer(msg, e.getPlayer().getDisplayName())).build());
+        messenger.sendMessageEmbedToAllBoundChannel(new EmbedBuilder().setColor(new Color(92, 184, 92)).setTitle(langMessageParser.parsePlayer(msg, e.getPlayer().getName())).build());
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
         String msg = language.getTranslatedMessage("mc.message.logout");
-        messenger.sendMessageEmbedToAllBoundChannel(new EmbedBuilder().setColor(new Color(243, 119, 54)).setTitle(langMessageParser.parsePlayer(msg, e.getPlayer().getDisplayName())).build());
+        messenger.sendMessageEmbedToAllBoundChannel(new EmbedBuilder().setColor(new Color(243, 119, 54)).setTitle(langMessageParser.parsePlayer(msg, e.getPlayer().getName())).build());
     }
 
     @EventHandler
     public void onPlayerKick(PlayerKickEvent e) {
         String msg = language.getTranslatedMessage("mc.message.logout");
-        messenger.sendMessageEmbedToAllBoundChannel(new EmbedBuilder().setColor(Color.RED).setTitle(langMessageParser.parsePlayer(msg, e.getPlayer().getDisplayName())).build());
+        messenger.sendMessageEmbedToAllBoundChannel(new EmbedBuilder().setColor(Color.RED).setTitle(langMessageParser.parsePlayer(msg, e.getPlayer().getName())).build());
     }
 
     @EventHandler
