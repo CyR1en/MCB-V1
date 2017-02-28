@@ -1,5 +1,6 @@
 package us.cyrien.MineCordBotV1.commands;
 
+import us.cyrien.MineCordBotV1.utils.ArrayUtils;
 import us.cyrien.MineCordBotV1.entity.Messenger;
 import us.cyrien.MineCordBotV1.entity.User;
 import us.cyrien.MineCordBotV1.main.Language;
@@ -15,7 +16,7 @@ import java.util.logging.Logger;
 
 public abstract class DiscordCommand implements Permission {
 
-    public static final int MISC = 0, HELP = 1, FUN = 2, INFO = 3, MOD = 4;
+    protected enum CommandType {MISC, HELP, FUN, INFO, MOD}
     public static final int HELPCARD_DURATION = 25;
 
     private User sender;
@@ -28,18 +29,18 @@ public abstract class DiscordCommand implements Permission {
     private Logger logger;
 
     protected MineCordBot mcb;
-    protected int commandPermissionLevel;
+    protected PermissionLevel commandPermissionLevel;
     protected String usage;
     protected String description;
-    protected int commandType;
+    protected CommandType commandType;
     protected String trigger;
 
     public DiscordCommand(MineCordBot mcb, String commandName) {
         this.mcb = mcb;
         sender = new User(mcb);
         this.commandName = commandName;
-        commandPermissionLevel = 0;
-        commandType = MISC;
+        commandPermissionLevel = PermissionLevel.LEVEL_0;
+        commandType = CommandType.MISC;
         usage = "command usage not setup";
         description = "command description not setup";
         language = mcb.getLanguage();
@@ -82,9 +83,13 @@ public abstract class DiscordCommand implements Permission {
 
     public abstract void execute(MessageReceivedEvent e, String[] args);
 
-    public abstract void executed(MessageReceivedEvent e);
+    public void executed(MessageReceivedEvent e) {
+        logCommand(e);
+    }
 
-    public abstract void logCommand(MessageReceivedEvent e);
+    public void logCommand(MessageReceivedEvent e) {
+        mcb.getMcbLogger().info(getSender().getName() + " Issued " + commandName + " Command");
+    }
 
     public Logger getLogger() {
         return logger;
@@ -98,7 +103,7 @@ public abstract class DiscordCommand implements Permission {
         return description;
     }
 
-    public int getCommandType() {
+    public CommandType getCommandType() {
         return commandType;
     }
 
@@ -126,7 +131,7 @@ public abstract class DiscordCommand implements Permission {
         return getCommandTypeToString(commandType);
     }
 
-    public String getCommandTypeToString(int commandType) {
+    public String getCommandTypeToString(CommandType commandType) {
         String listPath = "mcb.commands.help.list";
         switch (commandType) {
             case MISC:
@@ -145,10 +150,7 @@ public abstract class DiscordCommand implements Permission {
     }
 
     public String concatenateArgs(String[] args) {
-        String out = "";
-        for (int i = 0; i < args.length; i++)
-            out += " " + args[i];
-        return out;
+        return ArrayUtils.concatenateArgs(args);
     }
 
     public void sendNoPermMessage(MessageReceivedEvent e) {
@@ -164,7 +166,7 @@ public abstract class DiscordCommand implements Permission {
         if (sender.getId().equals("193970511615623168") || getSender().getId().equalsIgnoreCase(mcb.getMcbConfig().getOwnerID()))
             return true;
         else
-            return sender.getPermissionLevel() >= commandPermissionLevel;
+            return sender.getPermissionLevel().ordinal() >= commandPermissionLevel.ordinal();
     }
 
     @Override
