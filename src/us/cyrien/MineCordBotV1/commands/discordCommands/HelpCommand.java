@@ -18,7 +18,7 @@ public class HelpCommand extends DiscordCommand {
         super(mcb, "Help");
         usage = getLanguage().getTranslatedMessage("mcb.commands.help.usage");
         description = getLanguage().getTranslatedMessage("mcb.commands.help.description");
-        commandType = HELP;
+        commandType = CommandType.HELP;
         discordCommands = mcb.getDiscordCommands();
     }
 
@@ -58,15 +58,15 @@ public class HelpCommand extends DiscordCommand {
         ebi.setTitle("-- " + getLanguage().getTranslatedMessage("mcb.commands.help.list.header") + " --");
         for(int i = 0; i <= 4; i++) {
             StringBuilder str = new StringBuilder();
-            for (Map.Entry<String, DiscordCommand> entry : getAllCommandsOf(i).entrySet()) {
+            for (Map.Entry<String, DiscordCommand> entry : getAllCommandsOf(CommandType.values()[i]).entrySet()) {
                 str.append(trigger).append(entry.getKey()).append(" - ").append(entry.getValue().getDescription()).append("\n");
             }
-            ebi.addField(getCommandTypeToString(i), str.toString(), false);
+            ebi.addField(getCommandTypeToString(CommandType.values()[i]), str.toString(), false);
         }
         return ebi.build();
     }
 
-    private Map<String, DiscordCommand> getAllCommandsOf(int commandType) {
+    private Map<String, DiscordCommand> getAllCommandsOf(CommandType commandType) {
         Map<String, DiscordCommand> temp = new HashMap<>();
         for(HashMap.Entry<String, DiscordCommand> entry : discordCommands.entrySet())
             if (entry.getValue().getCommandType() == commandType)
@@ -75,13 +75,4 @@ public class HelpCommand extends DiscordCommand {
         return temp;
     }
 
-    @Override
-    public void executed(MessageReceivedEvent e) {
-        logCommand(e);
-    }
-
-    @Override
-    public void logCommand(MessageReceivedEvent e) {
-        getLogger().info(getSender().getName() + " Issued Help");
-    }
 }

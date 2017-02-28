@@ -20,8 +20,7 @@ public class TextChannelCommand extends DiscordCommand {
         super(mcb, "TextChannel");
         usage = getLanguage().getTranslatedMessage("mcb.commands.textchannel.usage");
         description = getLanguage().getTranslatedMessage("mcb.commands.textchannel.description");
-        commandType = MOD;
-        commandPermissionLevel = LEVEL_0;
+        commandType = CommandType.MOD;
         textChannels = (ArrayList<String>) mcb.getMcbConfig().getTextChannels();
         Collections.sort(textChannels);
     }
@@ -32,7 +31,7 @@ public class TextChannelCommand extends DiscordCommand {
             if (getSender().getId().equalsIgnoreCase(mcb.getMcbConfig().getOwnerID()))
                 return true;
             if (args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("remove"))
-                return getSender().getPermissionLevel() >= LEVEL_1;
+                return getSender().getPermissionLevel().ordinal() >= PermissionLevel.LEVEL_1.ordinal();
         }
         return true;
     }
@@ -145,14 +144,4 @@ public class TextChannelCommand extends DiscordCommand {
         return false;
     }
 
-
-    @Override
-    public void executed(MessageReceivedEvent e) {
-        logCommand(e);
-    }
-
-    @Override
-    public void logCommand(MessageReceivedEvent e) {
-        mcb.getMcbLogger().info(getSender().getName() + " Issued textchannel command");
-    }
 }

@@ -16,8 +16,8 @@ public class PermissionCommand extends DiscordCommand {
 
     public PermissionCommand(MineCordBot mcb) {
         super(mcb, "Permission Command");
-        commandType = MOD;
-        commandPermissionLevel = LEVEL_2;
+        commandType = CommandType.MOD;
+        commandPermissionLevel = PermissionLevel.LEVEL_2;
         description = getLanguage().getTranslatedMessage("mcb.commands.permission.description");
         usage = getLanguage().getTranslatedMessage("mcb.commands.permission.usage");
     }
@@ -108,11 +108,11 @@ public class PermissionCommand extends DiscordCommand {
 
     private void removePerm(String id, MessageReceivedEvent e) {
         User user = e.getJDA().getUserById(id);
-        if (getPermissionLevel(user.getId(), e) == LEVEL_0) {
+        if (getPermissionLevel(user.getId(), e) == PermissionLevel.LEVEL_0) {
             sendMessage(e, "No permission to be removed from `" + user.getId() + "`", 20);
             return;
         }
-        int permLevel = getPermissionLevel(user.getId(), e);
+        PermissionLevel permLevel = getPermissionLevel(user.getId(), e);
         List<String> pl = (List<String>) mcb.getPluginFile().getConfig().getList("Permissons.level_" + permLevel);
 
         mcb.getPluginFile().getConfig().set("Permissions.level_" + permLevel, pl);
@@ -141,30 +141,20 @@ public class PermissionCommand extends DiscordCommand {
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-        int level = getPermissionLevel(id, e);
+        PermissionLevel level = getPermissionLevel(id, e);
         return "User `" + id + "` have a `Level_" + level + "` permission.";
     }
 
-    private int getPermissionLevel(String id, MessageReceivedEvent e) {
+    private PermissionLevel getPermissionLevel(String id, MessageReceivedEvent e) {
         MineCordBotConfig cfg = mcb.getMcbConfig();
         if (cfg.getPermLvl3().contains(id))
-            return 3;
+            return PermissionLevel.LEVEL_3;
         else if (cfg.getPermLvl2().contains(id))
-            return 2;
+            return PermissionLevel.LEVEL_2;
         else if (cfg.getPermLvl1().contains(id))
-            return 1;
+            return PermissionLevel.LEVEL_3;
         else
-            return 0;
-    }
-
-    @Override
-    public void executed(MessageReceivedEvent e) {
-
-    }
-
-    @Override
-    public void logCommand(MessageReceivedEvent e) {
-
+            return PermissionLevel.LEVEL_0;
     }
 
     private MessageEmbed getHelp(MessageReceivedEvent e) {

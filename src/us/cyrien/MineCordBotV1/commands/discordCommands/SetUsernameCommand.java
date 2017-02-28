@@ -8,10 +8,9 @@ public class SetUsernameCommand extends DiscordCommand {
 
     public SetUsernameCommand(MineCordBot mcb) {
         super(mcb, "Set Username");
-        commandPermissionLevel = LEVEL_2;
+        commandPermissionLevel = PermissionLevel.LEVEL_2;
         description = getLanguage().getTranslatedMessage("mcb.commands.setusername.description");
         usage = getLanguage().getTranslatedMessage("mcb.commands.setusername.usage");
-        commandType = MISC;
     }
 
     @Override
@@ -28,13 +27,4 @@ public class SetUsernameCommand extends DiscordCommand {
         e.getJDA().getSelfUser().getManager().setName(concatenateArgs(args)).queue();
     }
 
-    @Override
-    public void executed(MessageReceivedEvent e) {
-        logCommand(e);
-    }
-
-    @Override
-    public void logCommand(MessageReceivedEvent e) {
-        getLogger().info(e.getAuthor().getName() + " Issued set username command");
-    }
 }

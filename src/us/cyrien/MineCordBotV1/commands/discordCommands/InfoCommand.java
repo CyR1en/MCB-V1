@@ -17,8 +17,7 @@ public class InfoCommand extends DiscordCommand {
         this.mcb = mcb;
         usage = getLanguage().getTranslatedMessage("mcb.commands.info.usage");
         description = getLanguage().getTranslatedMessage("mcb.commands.info.description");
-        commandType = INFO;
-        commandPermissionLevel = LEVEL_0;
+        commandType = CommandType.INFO;
     }
 
     @Override
@@ -61,13 +60,4 @@ public class InfoCommand extends DiscordCommand {
         return embedBuilder.build();
     }
 
-    @Override
-    public void executed(MessageReceivedEvent e) {
-        logCommand(e);
-    }
-
-    @Override
-    public void logCommand(MessageReceivedEvent e) {
-        getLogger().info(getSender().getName() + " issued info command");
-    }
 }

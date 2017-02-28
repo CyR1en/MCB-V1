@@ -3,6 +3,7 @@ package us.cyrien.MineCordBotV1.commands.discordCommands;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Icon;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import org.bukkit.command.Command;
 import us.cyrien.MineCordBotV1.commands.DiscordCommand;
 import us.cyrien.MineCordBotV1.main.MineCordBot;
 
@@ -17,10 +18,9 @@ public class SetAvatarCommand extends DiscordCommand {
 
     public SetAvatarCommand(MineCordBot mcb) {
         super(mcb, "Set Avatar");
-        commandPermissionLevel = LEVEL_2;
+        commandPermissionLevel = PermissionLevel.LEVEL_2;
         description = getLanguage().getTranslatedMessage("mcb.commands.setavatar.description");
         usage = getLanguage().getTranslatedMessage("mcb.commands.setavatar.usage");
-        commandType = MISC;
     }
 
     @Override
@@ -55,13 +55,4 @@ public class SetAvatarCommand extends DiscordCommand {
         e.getJDA().getSelfUser().getManager().setAvatar(avatar).queue();
     }
 
-    @Override
-    public void executed(MessageReceivedEvent e) {
-        logCommand(e);
-    }
-
-    @Override
-    public void logCommand(MessageReceivedEvent e) {
-        getLogger().info(e.getAuthor().getName() + " Issued set avatar command");
-    }
 }

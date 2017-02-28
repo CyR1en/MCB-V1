@@ -9,10 +9,9 @@ public class SetGameCommand extends DiscordCommand
 {
     public SetGameCommand(MineCordBot mcb) {
         super(mcb, "Set Game");
-        commandPermissionLevel = LEVEL_2;
+        commandPermissionLevel = PermissionLevel.LEVEL_2;
         description = getLanguage().getTranslatedMessage("mcb.commands.setgame.description");
         usage = getLanguage().getTranslatedMessage("mcb.commands.setgame.usage");
-        commandType = MISC;
     }
 
     @Override
@@ -29,13 +28,4 @@ public class SetGameCommand extends DiscordCommand
         e.getJDA().getPresence().setGame(Game.of(concatenateArgs(args)));
     }
 
-    @Override
-    public void executed(MessageReceivedEvent e) {
-        logCommand(e);
-    }
-
-    @Override
-    public void logCommand(MessageReceivedEvent e) {
-        getLogger().info(e.getAuthor().getName() + " Issued set game command");
-    }
 }

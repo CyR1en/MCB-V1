@@ -9,10 +9,9 @@ public class SetNicknameCommand extends DiscordCommand {
 
     public SetNicknameCommand(MineCordBot mcb) {
         super(mcb, "Set Nickname");
-        commandPermissionLevel = LEVEL_2;
+        commandPermissionLevel = PermissionLevel.LEVEL_2;
         description = getLanguage().getTranslatedMessage("mcb.commands.setnickname.description");
         usage = getLanguage().getTranslatedMessage("mcb.commands.setnickname.usage");
-        commandType = MISC;
     }
 
     @Override
@@ -30,13 +29,4 @@ public class SetNicknameCommand extends DiscordCommand {
         gc.setNickname(gc.getGuild().getMember(e.getJDA().getSelfUser()), concatenateArgs(args)).queue();
     }
 
-    @Override
-    public void executed(MessageReceivedEvent e) {
-        logCommand(e);
-    }
-
-    @Override
-    public void logCommand(MessageReceivedEvent e) {
-        getLogger().info(e.getAuthor().getName() + " Issued set nickname command");
-    }
 }

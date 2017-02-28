@@ -14,8 +14,7 @@ public class ListCommand extends DiscordCommand {
         super(mcb, "List");
         usage = getLanguage().getTranslatedMessage("mcb.commands.list.usage");
         description = getLanguage().getTranslatedMessage("mcb.commands.list.description");
-        commandType = INFO;
-        commandPermissionLevel = LEVEL_0;
+        commandType = CommandType.INFO;
     }
 
     @Override
@@ -26,7 +25,7 @@ public class ListCommand extends DiscordCommand {
     @Override
     public boolean hasPermission(String[] args) {
         if (args.length != 1) {
-            return getSender().getPermissionLevel() >= commandPermissionLevel;
+            return getSender().getPermissionLevel().ordinal() >= commandPermissionLevel.ordinal();
         } else
             return true;
     }
@@ -51,13 +50,4 @@ public class ListCommand extends DiscordCommand {
         return eb.build();
     }
 
-    @Override
-    public void executed(MessageReceivedEvent e) {
-        logCommand(e);
-    }
-
-    @Override
-    public void logCommand(MessageReceivedEvent e) {
-        getLogger().info(getSender().getName() + " Issued a list command.");
-    }
 }

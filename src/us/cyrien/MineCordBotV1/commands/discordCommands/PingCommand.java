@@ -20,6 +20,7 @@ public class PingCommand extends DiscordCommand {
         this.mcb = mcb;
         usage = getLanguage().getTranslatedMessage("mcb.commands.ping.usage");
         description = getLanguage().getTranslatedMessage("mcb.commands.ping.description");
+        commandType = CommandType.INFO;
     }
 
     @Override
@@ -41,13 +42,4 @@ public class PingCommand extends DiscordCommand {
                 msg.editMessage("Pong: `" + e.getMessage().getCreationTime().until(msg.getCreationTime(), ChronoUnit.MILLIS) + " ms`").queue(consumer));
     }
 
-    @Override
-    public void executed(MessageReceivedEvent e) {
-        logCommand(e);
-    }
-
-    @Override
-    public void logCommand(MessageReceivedEvent e) {
-        getLogger().info(e.getAuthor().getName() + " Issued ping command");
-    }
 }
