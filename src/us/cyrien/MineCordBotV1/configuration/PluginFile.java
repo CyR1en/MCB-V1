@@ -18,9 +18,13 @@ public class PluginFile {
     public PluginFile(MineCordBot p, String name, boolean copy) {
         mcb = p;
         f = new File(p.getDataFolder().toString() + "/" + name + ".yml");
+        File langf = new File(p.getDataFolder().toString() + "/lang");
+        if(langf.exists())
+            langf.exists();
         languages = new HashedMap<>();
         languages.put("en", new File(p.getDataFolder().toString() + "/lang/en.yml"));
         languages.put("es", new File(p.getDataFolder().toString() + "/lang/es.yml"));
+        languages.put("pl", new File(p.getDataFolder().toString() + "/lang/pl.yml"));
         for (String key : languages.keySet()) {
             if (!languages.get(key).exists())
                 if (copy) {
