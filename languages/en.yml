@@ -37,6 +37,12 @@ mcb:
     no-perm-message: "sorry you do not have access to this command."
     invalid-arguments: "invalid arguments."
   commands:
+    eval:
+      usage: "eval <expression>"
+      description: "Solve a math expression"
+    mcmd:
+      usage: "mcmd <Minecraft Command>"
+      description: "Execute Minecraft commands from Discord."
     permission:
       usage: "perm <add> <userID> <perm level> \n perm <remove> <userID> \n perm <get> <userID>"
       description: "add, remove permission to user and get what their permission level is."
