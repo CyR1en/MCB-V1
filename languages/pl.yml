@@ -37,6 +37,12 @@ mcb:
     no-perm-message: "Nie masz dostępu do tej komendy."
     invalid-arguments: "błędny arguments."
   commands:
+    eval:
+      usage: "eval <równanie>"
+      description: "Rozwiąż rówananie matematyczne"
+    mcmd:
+      usage: "mcmd <Komenda>"
+      description: "Wykonaj komendę na serwerze."
     permission:
       usage: "perm <add> <userID> <perm level> \n perm <remove> <userID> \n perm <get> <userID>"
       description: "dodaj, usuń i sprawdź poziom uprawnień użytkownika."
@@ -59,6 +65,7 @@ mcb:
       usage: "help [komenda]"
       description: "Pokaż listę komend bądź sposób użycia komendy."
       too-much-args: "zbyd dużo argumentów."
+      no-such-command: "Nie ma takiej komendy."
       list:
         header: "Komendy MineCordBota"
         info: "Komendy informacyjne"
