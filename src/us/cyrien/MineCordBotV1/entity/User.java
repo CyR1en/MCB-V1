@@ -13,7 +13,7 @@ public class User{
     private String name;
     private String nick;
     private String Id;
-    private int permissionLevel;
+    private Permission.PermissionLevel permissionLevel;
 
     public User(MineCordBot mcb) {
         this.mcb = mcb;
@@ -25,13 +25,13 @@ public class User{
         nick = e.getMember().getNickname();
         Id = e.getAuthor().getId();
         if(cfg.getPermLvl3().contains(getId()))
-            permissionLevel = Permission.LEVEL_3;
+            permissionLevel = Permission.PermissionLevel.LEVEL_3;
         else if(cfg.getPermLvl2().contains(getId()))
-            permissionLevel = Permission.LEVEL_2;
+            permissionLevel = Permission.PermissionLevel.LEVEL_2;
         else if(cfg.getPermLvl1().contains(getId()))
-            permissionLevel = Permission.LEVEL_1;
+            permissionLevel = Permission.PermissionLevel.LEVEL_1;
         else
-            permissionLevel = Permission.LEVEL_0;
+            permissionLevel = Permission.PermissionLevel.LEVEL_0;
         return this;
     }
 
@@ -47,7 +47,7 @@ public class User{
         return Id;
     }
 
-    public int getPermissionLevel() {
+    public Permission.PermissionLevel getPermissionLevel() {
         return permissionLevel;
     }
 

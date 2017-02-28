@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 
 public class MineCordBot extends JavaPlugin {
 
-    public static final String CURRENT_VERSION = "MineCordBot_R1";
+    public static final String CURRENT_VERSION = "MineCordBot v1.0.2";
     public static MineCordBot mcb;
 
     private JDA jda;
@@ -82,6 +82,8 @@ public class MineCordBot extends JavaPlugin {
         registerCommand("setavatar", new SetAvatarCommand(this));
         registerCommand("setgame", new SetGameCommand(this));
         registerCommand("perm", new PermissionCommand(this));
+        registerCommand("eval", new EvalCommand(this));
+        registerCommand("mcmd", new SendMinecraftCommand(this));
     }
 
     public void registerCommand(String name, DiscordCommand discordCommand) {
