@@ -35,6 +35,7 @@ public class MineCordBot extends JavaPlugin {
     private Logger mcbLogger;
     private UpTimer upTimer;
     private Updater updater;
+    private Metrics metrics;
 
     @Override
     public void onEnable() {
@@ -45,18 +46,13 @@ public class MineCordBot extends JavaPlugin {
         language = new Language(this, mcbConfig.getLanguage(), pluginFile);
         messenger = new Messenger(this);
         upTimer = new UpTimer();
-        try {
-            Metrics metrics = new Metrics(this);
-            metrics.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        metrics = new Metrics(this);
         discordInitialization();
         minecraftInitialization();
         if(mcbConfig.isAutoUpdate())
              updater = new Updater(this, 101682, this.getFile(), Updater.UpdateType.DEFAULT, false);
         else
-            updater = new Updater(this,101682, this.getFile(), Updater.UpdateType.NO_DOWNLOAD, true);
+             updater = new Updater(this,101682, this.getFile(), Updater.UpdateType.NO_DOWNLOAD, true);
     }
 
     public void discordInitialization() {

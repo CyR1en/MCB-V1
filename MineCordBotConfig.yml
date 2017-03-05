@@ -17,7 +17,7 @@ trigger: ","
 auto_delete_command_response: true
 
 # Auto update MineCordBot, to stay up to date
-auto_update: true
+auto_update: false
 
 # Bot's language. Available language: en(english)
 language: en
