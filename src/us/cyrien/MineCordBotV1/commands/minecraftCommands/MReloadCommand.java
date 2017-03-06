@@ -2,21 +2,19 @@ package us.cyrien.MineCordBotV1.commands.minecraftCommands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import us.cyrien.MineCordBotV1.commands.MinecraftCommand;
 import us.cyrien.MineCordBotV1.main.MineCordBot;
 
 import java.io.IOException;
 
-public class MReloadCommand implements CommandExecutor {
-
-    private MineCordBot mcb;
+public class MReloadCommand extends MinecraftCommand {
 
     public MReloadCommand(MineCordBot mcb) {
-        this.mcb = mcb;
+        super(mcb);
     }
 
-    private boolean preCommand(CommandSender commandSender, Command command, String[] args) {
+    public boolean preCommand(CommandSender commandSender, Command command, String[] args) {
         if (!command.getName().equalsIgnoreCase("minecordbot"))
             return usage(commandSender);
         if (!commandSender.hasPermission("minecordbot.reload"))
@@ -37,7 +35,7 @@ public class MReloadCommand implements CommandExecutor {
         return true;
     }
 
-    private boolean usage(CommandSender cs) {
+    public boolean usage(CommandSender cs) {
         cs.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6&l=== MineCordBot Usage ==="));
         cs.sendMessage("/minecordbot reload");
         return false;
