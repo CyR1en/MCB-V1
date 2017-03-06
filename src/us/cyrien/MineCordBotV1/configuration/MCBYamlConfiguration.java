@@ -59,7 +59,6 @@ public class MCBYamlConfiguration extends YamlConfiguration {
         try {
             config.load(file);
         } catch (FileNotFoundException var3) {
-            ;
         } catch (IOException var4) {
             Bukkit.getLogger().log(Level.SEVERE, "Cannot load " + file, var4);
         } catch (InvalidConfigurationException var5) {

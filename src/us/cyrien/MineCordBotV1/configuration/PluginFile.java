@@ -20,7 +20,7 @@ public class PluginFile {
         f = new File(p.getDataFolder().toString() + "/" + name + ".yml");
         File langf = new File(p.getDataFolder().toString() + "/lang");
         if(langf.exists())
-            langf.exists();
+            langf.delete();
         languages = new HashedMap<>();
         languages.put("en", new File(p.getDataFolder().toString() + "/lang/en.yml"));
         languages.put("es", new File(p.getDataFolder().toString() + "/lang/es.yml"));

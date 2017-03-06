@@ -126,15 +126,15 @@ public class MineCordBotConfig {
         return textChannels;
     }
 
-    public List getPermLvl1() {
+    public List<String> getPermLvl1() {
         return permLvl1;
     }
 
-    public List getPermLvl2() {
+    public List<String> getPermLvl2() {
         return permLvl2;
     }
 
-    public List getPermLvl3() {
+    public List<String> getPermLvl3() {
         return permLvl3;
     }
 
@@ -186,19 +186,19 @@ public class MineCordBotConfig {
         this.autoUpdate = autoUpdate;
     }
 
-    public void setTextChannels(List textChannels) {
+    public void setTextChannels(List<String> textChannels) {
         this.textChannels = textChannels;
     }
 
-    public void setPermLvl1(List permLvl1) {
+    public void setPermLvl1(List<String> permLvl1) {
         this.permLvl1 = permLvl1;
     }
 
-    public void setPermLvl2(List permLvl2) {
+    public void setPermLvl2(List<String> permLvl2) {
         this.permLvl2 = permLvl2;
     }
 
-    public void setPermLvl3(List permLvl3) {
+    public void setPermLvl3(List<String> permLvl3) {
         this.permLvl3 = permLvl3;
     }
 
