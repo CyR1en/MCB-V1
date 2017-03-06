@@ -24,7 +24,6 @@ public class PermissionCommand extends DiscordCommand {
 
     @Override
     public boolean checkArguments(MessageReceivedEvent e, String[] args) {
-        System.out.println(args.length + " args length");
         if (args.length == 0 || args.length > 3 || args.length == 1) {
             sendMessageEmbed(e, getInvalidHelpCard(e), HELPCARD_DURATION);
             return false;
@@ -79,15 +78,11 @@ public class PermissionCommand extends DiscordCommand {
 
     private void addPerm(int permLevel, String id, MessageReceivedEvent e) {
 
-        List<String> pl = (List<String>) mcb.getPluginFile().getConfig().getList("Permissons.level_" + permLevel);
-            /*
-        if(pl == null)
-            mcb.getPluginFile().getConfig().createSection("Permissons.level_" + permLevel);
-            */
+        List<String> pl = (List<String>) mcb.getPluginFile().getConfig().getList(("Permissions.level_" + permLevel));
         Member member = e.getGuild().getMember(e.getJDA().getUserById(id));
         if (member != null) {
             pl.add(member.getUser().getId());
-            mcb.getPluginFile().getConfig().set("Permissions.level_" + permLevel, pl);
+            mcb.getPluginFile().getConfig().set(("Permissions.level_" + permLevel), pl);
         } else {
             sendMessage(e, "User with `" + id + "` cannot be found.", 20);
             return;
@@ -102,8 +97,8 @@ public class PermissionCommand extends DiscordCommand {
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-        sendMessage(e, "User `" + id + "` now have Level_" + permLevel + " Permission.", 10);
-        mcb.getMcbLogger().info("Added User " + id + " to permissionLevel_" + permLevel);
+        sendMessage(e, "User `" + id + "` now has a level_" + permLevel + " Permission.", 20);
+        mcb.getMcbLogger().info("Added User " + id + " to permission level_" + permLevel);
     }
 
     private void removePerm(String id, MessageReceivedEvent e) {
@@ -113,9 +108,13 @@ public class PermissionCommand extends DiscordCommand {
             return;
         }
         PermissionLevel permLevel = getPermissionLevel(user.getId(), e);
-        List<String> pl = (List<String>) mcb.getPluginFile().getConfig().getList("Permissons.level_" + permLevel);
-
-        mcb.getPluginFile().getConfig().set("Permissions.level_" + permLevel, pl);
+        List<String> pl = (List<String>) mcb.getPluginFile().getConfig().getList(("Permissions.level_" + permLevel.ordinal()));
+        System.out.println(("Permission.level_" + permLevel.ordinal()));
+        if (pl.size() == 1) {
+            sendMessage(e, "Cannot remove user `" + id + "` because it's the last user on the permission list " + permLevel.toString().toLowerCase(), 20);
+            return;
+        }
+        mcb.getPluginFile().getConfig().set(("Permissions.level_" + permLevel.ordinal()), pl);
         try {
             mcb.getPluginFile().save();
         } catch (IOException ex) {
@@ -126,8 +125,8 @@ public class PermissionCommand extends DiscordCommand {
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-        sendMessage(e, "Removed Level_" + permLevel + " permission from `" + user.getId() + "`", 10);
-        mcb.getMcbLogger().info("Added User " + id + " to permission Level_" + permLevel);
+        sendMessage(e, "Removed " + permLevel.toString().toLowerCase() + " permission from `" + user.getId() + "`", 10);
+        mcb.getMcbLogger().info("Added User " + id + " to permission " + permLevel);
     }
 
     private String getPerm(String id, MessageReceivedEvent e) {
@@ -142,19 +141,27 @@ public class PermissionCommand extends DiscordCommand {
             e1.printStackTrace();
         }
         PermissionLevel level = getPermissionLevel(id, e);
-        return "User `" + id + "` have a `Level_" + level + "` permission.";
+        return "User `" + id + "` has a `" + level + "` permission.";
     }
 
     private PermissionLevel getPermissionLevel(String id, MessageReceivedEvent e) {
         MineCordBotConfig cfg = mcb.getMcbConfig();
-        if (cfg.getPermLvl3().contains(id))
+        if (containsID(cfg.getPermLvl3(), id))
             return PermissionLevel.LEVEL_3;
-        else if (cfg.getPermLvl2().contains(id))
+        else if (containsID(cfg.getPermLvl2(), id))
             return PermissionLevel.LEVEL_2;
-        else if (cfg.getPermLvl1().contains(id))
-            return PermissionLevel.LEVEL_3;
+        else if (containsID(cfg.getPermLvl1(), id))
+            return PermissionLevel.LEVEL_1;
         else
             return PermissionLevel.LEVEL_0;
+    }
+
+    private boolean containsID(List<String> str, String id) {
+        for (String s : str) {
+            if (s.equals(id))
+                return true;
+        }
+        return false;
     }
 
     private MessageEmbed getHelp(MessageReceivedEvent e) {

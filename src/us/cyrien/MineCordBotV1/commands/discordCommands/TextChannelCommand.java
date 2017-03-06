@@ -56,11 +56,6 @@ public class TextChannelCommand extends DiscordCommand {
         }
     }
 
-    private void printArray(String[] str) {
-        for (String s : str)
-            System.out.println(s);
-    }
-
     @Override
     public void execute(MessageReceivedEvent e, String[] args) {
         if (args[0].equalsIgnoreCase("list"))
@@ -71,7 +66,7 @@ public class TextChannelCommand extends DiscordCommand {
             removeTextChannel(args[1], e);
     }
 
-    public MessageEmbed generateListEmbed(MessageReceivedEvent e) {
+    private MessageEmbed generateListEmbed(MessageReceivedEvent e) {
         String path = "mcb.commands.textchannel.list.";
         EmbedBuilder eb = new EmbedBuilder();
         eb.setTitle("- " + getLanguage().getTranslatedMessage(path + "header") + " -");
@@ -117,7 +112,11 @@ public class TextChannelCommand extends DiscordCommand {
     private void removeTextChannel(String textChannelID, MessageReceivedEvent e) {
         List<String> tc = (List<String>) mcb.getPluginFile().getConfig().getList("text_channels");
         if (!containsID(textChannelID)) {
-            sendMessage(e, "Text channel `" + textChannelID + "` is not bound to Minecraft", 10);
+            sendMessage(e, "Text channel `" + textChannelID + "` is not bound to Minecraft", 20);
+            return;
+        }
+        if(tc.size() == 1) {
+            sendMessage(e, "Cannot remove textchannel `" + textChannelID + "` because it's the last textchannel on the list", 20);
             return;
         }
         tc.remove(textChannelID);
