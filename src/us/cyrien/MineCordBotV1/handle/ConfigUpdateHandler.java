@@ -6,6 +6,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class ConfigUpdateHandler {
@@ -83,7 +84,7 @@ public class ConfigUpdateHandler {
                     config.set(s, mcbConfig.isAutoUpdate());
             case "text_channels":
                 if (mode == SAVE)
-                    mcbConfig.setTextChannels(config.getList(s));
+                    mcbConfig.setTextChannels((List<String>) config.getList(s));
                 else
                     config.set(s, mcbConfig.getTextChannels());
                 break;
@@ -101,19 +102,19 @@ public class ConfigUpdateHandler {
                 break;
             case "permissions.level_1":
                 if (mode == SAVE)
-                    mcbConfig.setPermLvl1(config.getList(s));
+                    mcbConfig.setPermLvl1((List<String>) config.getList(s));
                 else
                     config.set(s, mcbConfig.getPermLvl1());
                 break;
             case "permissions.level_2":
                 if (mode == SAVE)
-                    mcbConfig.setPermLvl2(config.getList(s));
+                    mcbConfig.setPermLvl2((List<String>) config.getList(s));
                 else
                     config.set(s, mcbConfig.getPermLvl2());
                 break;
             case "permissions.level_3":
                 if (mode == SAVE)
-                    mcbConfig.setPermLvl3(config.getList(s));
+                    mcbConfig.setPermLvl3((List<String>) config.getList(s));
                 else
                     config.set(s, mcbConfig.getPermLvl3());
                 break;

@@ -1,5 +1,5 @@
 name: MineCordBot
-version: 1.0.2
+version: 1.0.3
 author: CyRien
 description: Discord bot that bridge chat from minecraft to discord
 
@@ -9,6 +9,11 @@ commands:
     minecordbot:
         description: MineCordBot general commands
         usage: /CFA <command>
+    dcmd:
+        description: Do Discord commands from Minecraft
+        usage: /dcmd <command>
 permmission:
     minecordbot.reload:
+        default: op
+    minecordbot.dcmd:
         default: op

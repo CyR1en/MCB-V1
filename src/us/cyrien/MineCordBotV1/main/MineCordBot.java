@@ -2,6 +2,7 @@ package us.cyrien.MineCordBotV1.main;
 
 import us.cyrien.MineCordBotV1.commands.DiscordCommand;
 import us.cyrien.MineCordBotV1.commands.discordCommands.*;
+import us.cyrien.MineCordBotV1.commands.minecraftCommands.Dcmd;
 import us.cyrien.MineCordBotV1.commands.minecraftCommands.MReloadCommand;
 import us.cyrien.MineCordBotV1.configuration.MineCordBotConfig;
 import us.cyrien.MineCordBotV1.configuration.PluginFile;
@@ -55,7 +56,7 @@ public class MineCordBot extends JavaPlugin {
              updater = new Updater(this,101682, this.getFile(), Updater.UpdateType.NO_DOWNLOAD, true);
     }
 
-    public void discordInitialization() {
+    private void discordInitialization() {
         try {
             jda = new JDABuilder(AccountType.BOT).setToken(mcbConfig.getBotToken()).buildAsync();
             jda.addEventListener(new CommandListener(this));
@@ -82,12 +83,13 @@ public class MineCordBot extends JavaPlugin {
         registerCommand("mcmd", new SendMinecraftCommand(this));
     }
 
-    public void registerCommand(String name, DiscordCommand discordCommand) {
+    private void registerCommand(String name, DiscordCommand discordCommand) {
         commands.put(name, discordCommand);
     }
 
-    public void minecraftInitialization() {
+    private void minecraftInitialization() {
         this.getCommand("minecordbot").setExecutor(new MReloadCommand(this));
+        this.getCommand("dcmd").setExecutor(new Dcmd(this));
         getServer().getPluginManager().registerEvents(new MinecraftEventListener(this), this);
         getServer().getPluginManager().registerEvents(new TabCompleteV2(this), this);
     }
@@ -120,11 +122,9 @@ public class MineCordBot extends JavaPlugin {
         return messenger;
     }
 
-
     public UpTimer getUpTimer() {
         return upTimer;
     }
-
 
     public Logger getMcbLogger() {
         return mcbLogger;
