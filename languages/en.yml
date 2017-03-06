@@ -44,7 +44,7 @@ mcb:
       usage: "mcmd <Minecraft Command>"
       description: "Execute Minecraft commands from Discord."
     permission:
-      usage: "perm <add> <userID> <perm level> \n perm <remove> <userID> \n perm <get> <userID>"
+      usage: "perm <add> <perm level> <userID> \n perm <remove> <userID> \n perm <get> <userID>"
       description: "add, remove permission to user and get what their permission level is."
     setgame:
       usage: "setgame <gametitle>"

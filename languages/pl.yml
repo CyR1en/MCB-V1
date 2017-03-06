@@ -44,7 +44,7 @@ mcb:
       usage: "mcmd <Komenda>"
       description: "Wykonaj komendę na serwerze."
     permission:
-      usage: "perm <add> <userID> <perm level> \n perm <remove> <userID> \n perm <get> <userID>"
+      usage: "perm <add> <perm level> <userID> \n perm <remove> <userID> \n perm <get> <userID>"
       description: "dodaj, usuń i sprawdź poziom uprawnień użytkownika."
     setgame:
       usage: "setgame <tytułgry>"
