@@ -3,7 +3,6 @@ package us.cyrien.MineCordBotV1.commands.discordCommands;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Icon;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import org.bukkit.command.Command;
 import us.cyrien.MineCordBotV1.commands.DiscordCommand;
 import us.cyrien.MineCordBotV1.main.MineCordBot;
 
@@ -17,8 +16,7 @@ public class SetAvatarCommand extends DiscordCommand {
     private Icon avatar;
 
     public SetAvatarCommand(MineCordBot mcb) {
-        super(mcb, "Set Avatar");
-        commandPermissionLevel = PermissionLevel.LEVEL_2;
+        super(mcb, "Set Avatar", CommandType.MISC, PermissionLevel.LEVEL_2);
         description = getLanguage().getTranslatedMessage("mcb.commands.setavatar.description");
         usage = getLanguage().getTranslatedMessage("mcb.commands.setavatar.usage");
     }
@@ -36,13 +34,13 @@ public class SetAvatarCommand extends DiscordCommand {
             avatar = Icon.from(in);
         } catch (MalformedURLException ex) {
             EmbedBuilder eb = new EmbedBuilder();
-            eb.setTitle("Invalid Link(MalformedURLException)");
+            eb.setTitle("Invalid Link(MalformedURLException)", null);
             eb.addField("Exception:", ex.getMessage(), false);
             sendMessageEmbed(e, eb.build(), 15);
             return false;
         } catch (IOException ex) {
             EmbedBuilder eb = new EmbedBuilder();
-            eb.setTitle("Invalid Link(IOException)");
+            eb.setTitle("Invalid Link(IOException)", null);
             eb.addField("Exception:", ex.getMessage(), false);
             sendMessageEmbed(e, eb.build(), 15);
             return false;

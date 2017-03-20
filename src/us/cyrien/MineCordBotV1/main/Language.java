@@ -1,16 +1,16 @@
 package us.cyrien.MineCordBotV1.main;
 
-import us.cyrien.MineCordBotV1.configuration.PluginFile;
+import us.cyrien.MineCordBotV1.configuration.LocalizationFile;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Language {
 
 	private String language;
     private MineCordBot mcb;
-    private PluginFile pf;
+    private LocalizationFile pf;
     private YamlConfiguration lang;
 
-	public Language(MineCordBot mcb, String language, PluginFile pf) {
+	public Language(MineCordBot mcb, String language, LocalizationFile pf) {
 	    this.mcb = mcb;
 	    this.pf = pf;
         if(this.pf.getLanguages().containsKey(language))
@@ -19,7 +19,7 @@ public class Language {
             mcb.getLogger().warning("language configuration invalid. Loading default language.");
             this.language = "en";
         }
-        lang = pf.getLang(language);
+        lang = pf.getLocalization(language);
     }
 
     public String getLanguage() {

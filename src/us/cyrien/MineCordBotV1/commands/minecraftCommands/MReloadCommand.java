@@ -4,9 +4,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import us.cyrien.MineCordBotV1.commands.MinecraftCommand;
+import us.cyrien.MineCordBotV1.configuration.MCBConfig;
 import us.cyrien.MineCordBotV1.main.MineCordBot;
-
-import java.io.IOException;
 
 public class MReloadCommand extends MinecraftCommand {
 
@@ -26,11 +25,7 @@ public class MReloadCommand extends MinecraftCommand {
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         if(!preCommand(commandSender, command, args))
             return true;
-        try {
-            mcb.getMcbConfig().reload();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        MCBConfig.reload();
         commandSender.sendMessage(ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "MineCordBot Reloaded!");
         return true;
     }
@@ -45,5 +40,6 @@ public class MReloadCommand extends MinecraftCommand {
         cs.sendMessage(ChatColor.RED + "You do not have permission to reload MineCordBot");
         return false;
     }
+
 
 }

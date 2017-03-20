@@ -14,11 +14,10 @@ public class EvalCommand extends DiscordCommand {
     private EmbedBuilder eb;
 
     public EvalCommand (MineCordBot mcb) {
-        super(mcb, "Math Evaluator");
+        super(mcb, "Math Evaluator", CommandType.FUN, PermissionLevel.LEVEL_0);
         usage = getLanguage().getTranslatedMessage("mcb.commands.eval.usage");
         description = getLanguage().getTranslatedMessage("mcb.commands.eval.description");
-        commandType = CommandType.FUN;
-        eb = new EmbedBuilder().setTitle("Math Evaluator");
+        eb = new EmbedBuilder().setTitle("Math Evaluator", null);
     }
 
     @Override
@@ -43,7 +42,7 @@ public class EvalCommand extends DiscordCommand {
     @Override
     public void execute(MessageReceivedEvent e, String[] args) {
         Expression ex = new Expression(ArrayUtils.concatenateArgs(args));
-        EmbedBuilder eb = new EmbedBuilder().setTitle("Math Evaluator");
+        EmbedBuilder eb = new EmbedBuilder().setTitle("Math Evaluator", null);
         eb.setColor(e.getGuild().getMemberById(e.getJDA().getSelfUser().getId()).getColor());
         eb.addField("Result", "(" + ex.getExpressionString() + ") = " + ex.calculate(), false);
         sendMessageEmbed(e, eb.build(), 25);

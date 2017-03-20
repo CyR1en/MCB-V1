@@ -1,6 +1,7 @@
 package us.cyrien.MineCordBotV1.commands.discordCommands;
 
 import us.cyrien.MineCordBotV1.commands.DiscordCommand;
+import us.cyrien.MineCordBotV1.configuration.MCBConfig;
 import us.cyrien.MineCordBotV1.main.MineCordBot;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Guild;
@@ -13,11 +14,10 @@ public class InfoCommand extends DiscordCommand {
     private MineCordBot mcb;
 
     public InfoCommand(MineCordBot mcb) {
-        super(mcb, "Info");
+        super(mcb, "Info", CommandType.INFO, PermissionLevel.LEVEL_0);
         this.mcb = mcb;
         usage = getLanguage().getTranslatedMessage("mcb.commands.info.usage");
         description = getLanguage().getTranslatedMessage("mcb.commands.info.description");
-        commandType = CommandType.INFO;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class InfoCommand extends DiscordCommand {
         String path = "mcb.commands.info.minfo.";
         int textChannelCount = e.getGuild().getTextChannels().size();
         int voiceChannelCount = e.getGuild().getVoiceChannels().size();
-        String clientID = mcb.getMcbConfig().getClientID();
+        String clientID = MCBConfig.get("client_id");
         String botName = e.getJDA().getSelfUser().getName();
         Guild guild = e.getGuild();
         Member member = guild.getMember(e.getJDA().getSelfUser());

@@ -8,8 +8,7 @@ import us.cyrien.MineCordBotV1.main.MineCordBot;
 public class SetGameCommand extends DiscordCommand
 {
     public SetGameCommand(MineCordBot mcb) {
-        super(mcb, "Set Game");
-        commandPermissionLevel = PermissionLevel.LEVEL_2;
+        super(mcb, "Set Game", CommandType.MISC, PermissionLevel.LEVEL_1);
         description = getLanguage().getTranslatedMessage("mcb.commands.setgame.description");
         usage = getLanguage().getTranslatedMessage("mcb.commands.setgame.usage");
     }

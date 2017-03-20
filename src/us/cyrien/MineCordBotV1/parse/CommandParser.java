@@ -1,5 +1,6 @@
 package us.cyrien.MineCordBotV1.parse;
 
+import us.cyrien.MineCordBotV1.configuration.MCBConfig;
 import us.cyrien.MineCordBotV1.entity.User;
 import us.cyrien.MineCordBotV1.main.MineCordBot;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -17,7 +18,7 @@ public class CommandParser {
     public CommandContainer parse(String rw, MessageReceivedEvent e) {
         ArrayList<String> split = new ArrayList<>();
         String raw = rw;
-        String beheaded = raw.replaceFirst(mcb.getMcbConfig().getTrigger(), "");
+        String beheaded = raw.replaceFirst(MCBConfig.get("trigger"), "");
         String[] splitBeheaded = beheaded.split(" ");
         for (String s : splitBeheaded)
             split.add(s);

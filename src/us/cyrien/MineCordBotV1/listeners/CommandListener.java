@@ -1,5 +1,6 @@
 package us.cyrien.MineCordBotV1.listeners;
 
+import us.cyrien.MineCordBotV1.configuration.MCBConfig;
 import us.cyrien.MineCordBotV1.handle.CommandHandler;
 import us.cyrien.MineCordBotV1.main.MineCordBot;
 import us.cyrien.MineCordBotV1.parse.CommandParser;
@@ -20,7 +21,7 @@ public class CommandListener extends ListenerAdapter{
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        boolean execHead = event.getMessage().getContent().startsWith(mcb.getMcbConfig().getTrigger());
+        boolean execHead = event.getMessage().getContent().startsWith(MCBConfig.get("trigger"));
         boolean notSelf = !event.getMember().getUser().getId().equalsIgnoreCase(mcb.getJda().getSelfUser().getId());
         if(execHead && notSelf)
             cmdHandler.handleCommand(cmdParser.parse(event.getMessage().getContent(), event));

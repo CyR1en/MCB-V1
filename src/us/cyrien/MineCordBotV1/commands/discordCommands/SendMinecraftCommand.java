@@ -11,11 +11,9 @@ import us.cyrien.MineCordBotV1.main.MineCordBot;
 public class SendMinecraftCommand extends DiscordCommand {
 
     public SendMinecraftCommand(MineCordBot mcb) {
-        super(mcb, "Minecraft Command Sender");
+        super(mcb, "Minecraft Command Sender", CommandType.MOD, PermissionLevel.LEVEL_2);
         usage = getLanguage().getTranslatedMessage("mcb.commands.mcmd.usage");
         description = getLanguage().getTranslatedMessage("mcb.commands.mcmd.description");
-        commandPermissionLevel = PermissionLevel.LEVEL_2;
-        commandType = CommandType.MOD;
     }
 
     @Override

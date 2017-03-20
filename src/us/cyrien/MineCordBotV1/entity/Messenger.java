@@ -1,7 +1,8 @@
 package us.cyrien.MineCordBotV1.entity;
 
+import org.json.JSONArray;
+import us.cyrien.MineCordBotV1.configuration.MCBConfig;
 import us.cyrien.MineCordBotV1.main.MineCordBot;
-import us.cyrien.MineCordBotV1.parse.MultiLangMessageParser;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -16,14 +17,12 @@ import java.util.function.Consumer;
 public class Messenger {
 
     private MineCordBot mcb;
-    private MultiLangMessageParser langMessageParser;
 
     private ScheduledExecutorService scheduler;
 
     public Messenger(MineCordBot mcb) {
         scheduler = Executors.newScheduledThreadPool(1);
         this.mcb = mcb;
-        langMessageParser = new MultiLangMessageParser();
     }
 
     //To Minecraft
@@ -50,21 +49,29 @@ public class Messenger {
     }
 
     public void sendTempMessage(MessageReceivedEvent e, String message, int length) {
-        e.getTextChannel().sendMessage(message).queue(msg -> scheduler.schedule(() -> msg.deleteMessage().queue(), length, TimeUnit.SECONDS));
+        e.getTextChannel().sendMessage(message).queue(msg -> scheduler.schedule(() -> msg.delete().queue(), length, TimeUnit.SECONDS));
     }
 
     public void sendTempMessageEmbed(MessageReceivedEvent e, MessageEmbed me, int length) {
-        e.getTextChannel().sendMessage(me).queue(msg -> scheduler.schedule(() -> msg.deleteMessage().queue(), length, TimeUnit.SECONDS));
+        e.getTextChannel().sendMessage(me).queue(msg -> scheduler.schedule(() -> msg.delete().queue(), length, TimeUnit.SECONDS));
     }
 
     public void sendMessageToAllBoundChannel(String message) {
-        for (String s : mcb.getMcbConfig().getTextChannels())
-            mcb.getJda().getTextChannelById(s).sendMessage(message).queue();
+        JSONArray tcArray = MCBConfig.get("text_channels");
+        assert tcArray != null;
+        for (Object s : tcArray) {
+            if (mcb.getJda().getTextChannelById(s.toString()) != null)
+                mcb.getJda().getTextChannelById(s.toString()).sendMessage(message).queue();
+        }
     }
 
     public void sendMessageEmbedToAllBoundChannel(MessageEmbed messageEmbed) {
-        for(String s : mcb.getMcbConfig().getTextChannels())
-            mcb.getJda().getTextChannelById(s).sendMessage(messageEmbed).queue();
+        JSONArray tcArray = MCBConfig.get("text_channels");
+        assert tcArray != null;
+        for (Object s : tcArray) {
+            if (mcb.getJda().getTextChannelById(s.toString()) != null)
+                mcb.getJda().getTextChannelById(s.toString()).sendMessage(messageEmbed).queue();
+        }
     }
 
 }

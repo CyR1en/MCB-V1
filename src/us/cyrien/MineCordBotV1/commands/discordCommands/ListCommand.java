@@ -11,10 +11,9 @@ import org.bukkit.entity.Player;
 public class ListCommand extends DiscordCommand {
 
     public ListCommand(MineCordBot mcb) {
-        super(mcb, "List");
+        super(mcb, "List", CommandType.INFO, PermissionLevel.LEVEL_0);
         usage = getLanguage().getTranslatedMessage("mcb.commands.list.usage");
         description = getLanguage().getTranslatedMessage("mcb.commands.list.description");
-        commandType = CommandType.INFO;
     }
 
     @Override
@@ -39,7 +38,7 @@ public class ListCommand extends DiscordCommand {
     private MessageEmbed generateList(EmbedBuilder eb) {
         StringBuilder out;
         if (Bukkit.getServer().getOnlinePlayers() == null || Bukkit.getServer().getOnlinePlayers().size() == 0) {
-            eb.setTitle("There are no players online...");
+            eb.setTitle("There are no players online...", null);
         } else {
             out = new StringBuilder();
             int counter = 1;

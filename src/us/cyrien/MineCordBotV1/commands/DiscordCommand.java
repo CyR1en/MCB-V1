@@ -5,6 +5,7 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import us.cyrien.MineCordBotV1.configuration.MCBConfig;
 import us.cyrien.MineCordBotV1.entity.Messenger;
@@ -14,8 +15,10 @@ import us.cyrien.MineCordBotV1.main.MineCordBot;
 import us.cyrien.MineCordBotV1.parse.MultiLangMessageParser;
 import us.cyrien.MineCordBotV1.permission.Permission;
 import us.cyrien.MineCordBotV1.utils.ArrayUtils;
+import us.cyrien.MineCordBotV1.utils.JsonUtils;
 
 import java.awt.*;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 public abstract class DiscordCommand implements Permission {
@@ -40,7 +43,7 @@ public abstract class DiscordCommand implements Permission {
     protected String description;
     protected CommandType commandType;
     protected String trigger;
-    protected TextChannel boundTextChannel;
+    protected JSONArray boundTextChannel;
 
     public DiscordCommand(MineCordBot mcb, String commandName, CommandType commandType, PermissionLevel commandPermissionLevel) {
         this.mcb = mcb;
@@ -87,11 +90,16 @@ public abstract class DiscordCommand implements Permission {
     }
 
     public boolean checkTextChannel(MessageReceivedEvent e) {
-        boundTextChannel = setBoundTextChannel(e);
+        boundTextChannel = setBoundTextChannel();
         if (boundTextChannel == null)
             return true;
-        if (boundTextChannel == e.getTextChannel())
+        else if (boundTextChannel.length() == 1 || boundTextChannel.get(0).toString().trim().equals(""))
             return true;
+        for (Object s : boundTextChannel) {
+            TextChannel tc = e.getJDA().getTextChannelById(s.toString());
+            if (tc != null && tc.getId().equals(e.getTextChannel().getId()))
+            return true;
+        }
         return false;
     }
 
@@ -104,7 +112,7 @@ public abstract class DiscordCommand implements Permission {
     }
 
     public void logCommand(MessageReceivedEvent e) {
-        mcb.getMcbLogger().info(getSender().getName() + " Issued " + commandName + " Command");
+        getLogger().info(getSender().getName() + " Issued " + commandName + " Command");
     }
 
     public Logger getLogger() {
@@ -169,24 +177,19 @@ public abstract class DiscordCommand implements Permission {
         }
     }
 
-    protected TextChannel setBoundTextChannel(MessageReceivedEvent e) {
+    private JSONArray setBoundTextChannel() {
         JSONObject ctc = MCBConfig.getJSONObject("command_text_channel");
         switch (commandType) {
             case MISC:
-                String mid = ctc.getString("misc");
-                return MineCordBot.jda.getTextChannelById(mid);
+                return ctc.getJSONArray("misc");
             case HELP:
-                String hid = ctc.getString("misc");
-                return MineCordBot.jda.getTextChannelById(hid);
+                return ctc.getJSONArray("help");
             case FUN:
-                String fid = ctc.getString("misc");
-                return MineCordBot.jda.getTextChannelById(fid);
+                return ctc.getJSONArray("fun");
             case INFO:
-                String iid = ctc.getString("misc");
-                return MineCordBot.jda.getTextChannelById(iid);
+                return ctc.getJSONArray("info");
             case MOD:
-                String m1id = ctc.getString("misc");
-                return MineCordBot.jda.getTextChannelById(m1id);
+                return ctc.getJSONArray("mod");
             default:
                 return null;
         }

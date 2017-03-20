@@ -6,13 +6,19 @@ description: Discord bot that bridge chat from minecraft to discord
 main: us.cyrien.MineCordBotV1.main.MineCordBot
 
 commands:
+    dme:
+        description: Discord /me
+        usage: /dme <message>
+        permission: MineCordBot.dme
     minecordbot:
         description: MineCordBot general commands
-        usage: /CFA <command>
+        usage: /minecordbot <command>
     dcmd:
-        description: Do Discord commands from Minecraft
-        usage: /dcmd <command>
+        description: Do discord commands from minecraft
+        usage: /dcmd <Discord command> {args...}
 permmission:
+    minecordbot.dme:
+        default: op
     minecordbot.reload:
         default: op
     minecordbot.dcmd:

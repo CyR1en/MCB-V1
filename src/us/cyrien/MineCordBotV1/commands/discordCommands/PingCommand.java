@@ -1,6 +1,7 @@
 package us.cyrien.MineCordBotV1.commands.discordCommands;
 
 import us.cyrien.MineCordBotV1.commands.DiscordCommand;
+import us.cyrien.MineCordBotV1.configuration.MCBConfig;
 import us.cyrien.MineCordBotV1.main.MineCordBot;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -13,14 +14,11 @@ import java.util.function.Consumer;
 
 public class PingCommand extends DiscordCommand {
 
-    private MineCordBot mcb;
-
     public PingCommand(MineCordBot mcb) {
-        super(mcb, "Ping");
+        super(mcb, "Ping", CommandType.INFO, PermissionLevel.LEVEL_0);
         this.mcb = mcb;
         usage = getLanguage().getTranslatedMessage("mcb.commands.ping.usage");
         description = getLanguage().getTranslatedMessage("mcb.commands.ping.description");
-        commandType = CommandType.INFO;
     }
 
     @Override
@@ -31,8 +29,9 @@ public class PingCommand extends DiscordCommand {
     @Override
     public void execute(MessageReceivedEvent e, String args[]) {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        if (mcb.getMcbConfig().isAutoDeleteCommandResponse())
-            sendLatency(e, msg -> scheduler.schedule(() -> msg.deleteMessage().queue(), 20, TimeUnit.SECONDS));
+        boolean isAutoDelete = MCBConfig.get("auto_delete_command_response");
+        if (isAutoDelete)
+            sendLatency(e, msg -> scheduler.schedule(() -> msg.delete().queue(), 20, TimeUnit.SECONDS));
         else
             sendLatency(e, null);
     }

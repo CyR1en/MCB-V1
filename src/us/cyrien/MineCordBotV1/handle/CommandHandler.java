@@ -17,14 +17,18 @@ public class CommandHandler {
     public void handleCommand(CommandParser.CommandContainer cmd) {
         HashMap<String, DiscordCommand> commands = mcb.getDiscordCommands();
         if (commands.containsKey(cmd.invoke)) {
+            commands.get(cmd.invoke).setEvent(cmd.event);
             commands.get(cmd.invoke).setSender(cmd.sender);
-            if (commands.get(cmd.invoke).checkArguments(cmd.event, cmd.args)) {
-                if (commands.get(cmd.invoke).hasPermission(cmd.args)) {
-                    commands.get(cmd.invoke).execute(cmd.event, cmd.args);
-                    commands.get(cmd.invoke).executed(cmd.event);
-                } else
-                    commands.get(cmd.invoke).sendNoPermMessage(cmd.event);
-            }
+            if (commands.get(cmd.invoke).checkTextChannel(cmd.event)) {
+                if (commands.get(cmd.invoke).checkArguments(cmd.event, cmd.args)) {
+                    if (commands.get(cmd.invoke).hasPermission(cmd.args)) {
+                        commands.get(cmd.invoke).execute(cmd.event, cmd.args);
+                        commands.get(cmd.invoke).executed(cmd.event);
+                    } else
+                        commands.get(cmd.invoke).sendNoPermMessage(cmd.event);
+                }
+            } else
+                commands.get(cmd.invoke).sendWrongTc(cmd.event);
         }
     }
 }

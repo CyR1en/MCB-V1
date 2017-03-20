@@ -8,8 +8,7 @@ import us.cyrien.MineCordBotV1.main.MineCordBot;
 public class SetNicknameCommand extends DiscordCommand {
 
     public SetNicknameCommand(MineCordBot mcb) {
-        super(mcb, "Set Nickname");
-        commandPermissionLevel = PermissionLevel.LEVEL_2;
+        super(mcb, "Set Nickname", CommandType.MISC, PermissionLevel.LEVEL_2);
         description = getLanguage().getTranslatedMessage("mcb.commands.setnickname.description");
         usage = getLanguage().getTranslatedMessage("mcb.commands.setnickname.usage");
     }

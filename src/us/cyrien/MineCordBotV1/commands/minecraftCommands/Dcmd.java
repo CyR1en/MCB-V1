@@ -4,8 +4,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import us.cyrien.MineCordBotV1.commands.MinecraftCommand;
+import us.cyrien.MineCordBotV1.configuration.MCBConfig;
 import us.cyrien.MineCordBotV1.main.MineCordBot;
 import us.cyrien.MineCordBotV1.utils.ArrayUtils;
+
+import java.util.List;
 
 public class Dcmd extends MinecraftCommand {
 
@@ -24,7 +27,9 @@ public class Dcmd extends MinecraftCommand {
     }
 
     private void command(CommandSender commandSender, String[] args) {
-        for (String s : mcb.getMcbConfig().getTextChannels())
+        List<String> tc = MCBConfig.get("text_channels");
+        assert tc != null;
+        for (String s : tc)
             mcb.getJda().getTextChannelById(s).sendMessage(ArrayUtils.concatenateArgs(args)).queue(consumer ->
                     mcb.getLogger().info(commandSender.getName() + " Executed a discord command : " + args[0])
             );
