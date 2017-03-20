@@ -36,7 +36,12 @@ mcb:
   command:
     no-perm-message: "sorry you do not have access to this command."
     invalid-arguments: "invalid arguments."
+    invalid-tc: "invalid text channel for command."
   commands:
+    reload:
+      usage: "reload"
+      description: "reload the config for MineCordBot"
+      reloaded: "MineCordBot config reloaded!"
     eval:
       usage: "eval <expression>"
       description: "Solve a math expression"

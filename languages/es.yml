@@ -43,6 +43,31 @@ mcb:
     no-perm-message: "Lo siento, pero no tienes acceso a esta orden."
     invalid-arguments: "Argumentos Invalidos."
   commands:
+    reload:
+      usage: "reload"
+      description: "reload the config for MineCordBot"
+      reloaded: "MineCordBot config reloaded!"
+    eval:
+      usage: "eval <expression>"
+      description: "Solve a math expression"
+    mcmd:
+      usage: "mcmd <Minecraft Command>"
+      description: "Execute Minecraft commands from Discord."
+    permission:
+      usage: "perm <add> <perm level> <userID> \n perm <remove> <userID> \n perm <get> <userID>"
+      description: "add, remove permission to user and get what their permission level is."
+    setgame:
+      usage: "setgame <gametitle>"
+      description: "set your discord bot's game."
+    setavatar:
+      usage: "setavatar <imageurl>"
+      description: "set your discord bot's avatar."
+    setusername:
+      usage: "setusername <username>"
+      description: "set your discord bot's username."
+    setnickname:
+      usage: "setnickname <nickname>"
+      description: "set your discord bot's nickname."
     ping:
       usage: "ping"
       description: "Conpruebe el tiempo de respuesta del bot."
