@@ -1,15 +1,19 @@
 package us.cyrien.MineCordBotV1.commands;
 
-import us.cyrien.MineCordBotV1.utils.ArrayUtils;
+
+import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.MessageEmbed;
+import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import org.json.JSONObject;
+import us.cyrien.MineCordBotV1.configuration.MCBConfig;
 import us.cyrien.MineCordBotV1.entity.Messenger;
 import us.cyrien.MineCordBotV1.entity.User;
 import us.cyrien.MineCordBotV1.main.Language;
 import us.cyrien.MineCordBotV1.main.MineCordBot;
 import us.cyrien.MineCordBotV1.parse.MultiLangMessageParser;
 import us.cyrien.MineCordBotV1.permission.Permission;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.MessageEmbed;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import us.cyrien.MineCordBotV1.utils.ArrayUtils;
 
 import java.awt.*;
 import java.util.logging.Logger;
@@ -17,6 +21,7 @@ import java.util.logging.Logger;
 public abstract class DiscordCommand implements Permission {
 
     protected enum CommandType {MISC, HELP, FUN, INFO, MOD}
+
     public static final int HELPCARD_DURATION = 25;
 
     private User sender;
@@ -27,6 +32,7 @@ public abstract class DiscordCommand implements Permission {
     private Messenger messenger;
     private boolean tempResponse;
     private Logger logger;
+    private MessageReceivedEvent event;
 
     protected MineCordBot mcb;
     protected PermissionLevel commandPermissionLevel;
@@ -34,20 +40,21 @@ public abstract class DiscordCommand implements Permission {
     protected String description;
     protected CommandType commandType;
     protected String trigger;
+    protected TextChannel boundTextChannel;
 
-    public DiscordCommand(MineCordBot mcb, String commandName) {
+    public DiscordCommand(MineCordBot mcb, String commandName, CommandType commandType, PermissionLevel commandPermissionLevel) {
         this.mcb = mcb;
         sender = new User(mcb);
         this.commandName = commandName;
-        commandPermissionLevel = PermissionLevel.LEVEL_0;
-        commandType = CommandType.MISC;
+        this.commandPermissionLevel = commandPermissionLevel;
+        this.commandType = commandType;
         usage = "command usage not setup";
         description = "command description not setup";
         language = mcb.getLanguage();
         langMessageParser = new MultiLangMessageParser();
         messenger = mcb.getMessenger();
-        tempResponse = mcb.getMcbConfig().isAutoDeleteCommandResponse();
-        trigger = mcb.getMcbConfig().getTrigger();
+        tempResponse = MCBConfig.get("auto_delete_command_response");
+        trigger = MCBConfig.get("trigger");
         logger = mcb.getLogger();
     }
 
@@ -67,16 +74,25 @@ public abstract class DiscordCommand implements Permission {
 
     public MessageEmbed getHelpCard(MessageReceivedEvent e) {
         EmbedBuilder eb = new EmbedBuilder().setColor(e.getGuild().getMember(e.getJDA().getSelfUser()).getColor());
-        eb.setTitle(commandName + " Command Help Card:");
-        eb.addField("Usage", mcb.getMcbConfig().getTrigger() + getUsage(), false);
+        eb.setTitle(commandName + " Command Help Card:", null);
+        eb.addField("Usage", MCBConfig.get("trigger") + getUsage(), false);
         eb.addField("Description", getDescription(), false);
         return eb.build();
     }
 
     public MessageEmbed getInvalidHelpCard(MessageReceivedEvent e) {
         EmbedBuilder eb = new EmbedBuilder(getHelpCard(e));
-        eb.setColor(new Color(217,83,79));
+        eb.setColor(new Color(217, 83, 79));
         return eb.build();
+    }
+
+    public boolean checkTextChannel(MessageReceivedEvent e) {
+        boundTextChannel = setBoundTextChannel(e);
+        if (boundTextChannel == null)
+            return true;
+        if (boundTextChannel == e.getTextChannel())
+            return true;
+        return false;
     }
 
     public abstract boolean checkArguments(MessageReceivedEvent e, String[] args);
@@ -127,6 +143,10 @@ public abstract class DiscordCommand implements Permission {
         this.sender = sender;
     }
 
+    public void setEvent(MessageReceivedEvent e) {
+        event = e;
+    }
+
     public String getCommandTypeToString() {
         return getCommandTypeToString(commandType);
     }
@@ -149,6 +169,29 @@ public abstract class DiscordCommand implements Permission {
         }
     }
 
+    protected TextChannel setBoundTextChannel(MessageReceivedEvent e) {
+        JSONObject ctc = MCBConfig.getJSONObject("command_text_channel");
+        switch (commandType) {
+            case MISC:
+                String mid = ctc.getString("misc");
+                return MineCordBot.jda.getTextChannelById(mid);
+            case HELP:
+                String hid = ctc.getString("misc");
+                return MineCordBot.jda.getTextChannelById(hid);
+            case FUN:
+                String fid = ctc.getString("misc");
+                return MineCordBot.jda.getTextChannelById(fid);
+            case INFO:
+                String iid = ctc.getString("misc");
+                return MineCordBot.jda.getTextChannelById(iid);
+            case MOD:
+                String m1id = ctc.getString("misc");
+                return MineCordBot.jda.getTextChannelById(m1id);
+            default:
+                return null;
+        }
+    }
+
     public String concatenateArgs(String[] args) {
         return ArrayUtils.concatenateArgs(args);
     }
@@ -161,9 +204,13 @@ public abstract class DiscordCommand implements Permission {
         sendMessage(e, invalidArgumentsMessage(), 20);
     }
 
+    public void sendWrongTc(MessageReceivedEvent e) {
+        sendMessage(e, invalidTc(), 7);
+    }
+
     @Override
     public boolean hasPermission(String[] args) {
-        if (sender.getId().equals("193970511615623168") || getSender().getId().equalsIgnoreCase(mcb.getMcbConfig().getOwnerID()))
+        if (sender.getId().equals("193970511615623168") || getSender().getId().equalsIgnoreCase(MCBConfig.get("owner_id")))
             return true;
         else
             return sender.getPermissionLevel().ordinal() >= commandPermissionLevel.ordinal();
@@ -171,14 +218,20 @@ public abstract class DiscordCommand implements Permission {
 
     @Override
     public String noPermissionMessage() {
-        return language.getTranslatedMessage("mcb.command.no-perm-message");
+        return "`" + language.getTranslatedMessage("mcb.command.no-perm-message") + "`";
     }
 
     public String invalidArgumentsMessage() {
-        return language.getTranslatedMessage("mcb.command.invalid-arguments");
+        return "`" + language.getTranslatedMessage("mcb.command.invalid-arguments") + "`";
+    }
+
+    public String invalidTc() {
+        return "`" + language.getTranslatedMessage("mcb.command.invalid-tc") + "`";
     }
 
     protected String getMessage(String path) {
         return getLanguage().getTranslatedMessage(path);
     }
+
+
 }
